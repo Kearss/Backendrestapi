@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Kearsz/WEBapplicationRESTAPI/issues"
   },
-  "homepage": "https://github.com/Kearsz/WEBapplicationRESTAPI#readme"
+  "homepage": "https://github.com/Kearsz/WEBapplicationRESTAPI#readme",
+  "dependencies": {
+    "ejs": "^3.1.7"
+  }
 }

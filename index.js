@@ -20,7 +20,7 @@ console.log("Failed to connect to the database.", err)
 })
 
 app.get("/", (req, res) => {
-    res.send("Hello!")
+    res.render("index");
 });
 
 //Tuodaan reitit erillisestä tiedostosta
