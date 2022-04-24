@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajax Message</title>
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    crossorigin="anonymous"
+  />
+</head>
+<style>
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+
+  ul {
+    width: 100%;
+    padding-top: 15px;
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  a {
+    color: white;
+    font-size: 20px;
+  }
+  header {
+    width: 100%;
+    background-color: rgba(69, 75, 163, 0.89);
+  }
+
+  nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .container {
+    width: 100%;
+    overflow: auto;
+  }
+
+  @media screen and (max-width:768px) {
+  .tohide { 
+    display: none; 
+    }
+
+    table {
+      font-size: 12px;
+    }
+    
+    ul {
+      flex-direction: column;
+    }
+  }
+
+</style>
+<body>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/api/getall">Get File</a></li>
+          <li><a href="/api/add">Add data</a></li>
+          <li><a href="/api/:musicId">find data</a></li>
+          <li><a href="/api/update/:musicId">Update file</a></li>
+          <li><a href="/api/delete/:musicId">remove data</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <footer>Made by Dinh Kim</footer>
+  </body>
+</html>
