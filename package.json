@@ -20,5 +20,6 @@
   "bugs": {
     "url": "https://github.com/Kearsz/WEBapplicationRESTAPI/issues"
   },
-  "homepage": "https://github.com/Kearsz/WEBapplicationRESTAPI#readme"
+  "homepage": "https://github.com/Kearsz/WEBapplicationRESTAPI#readme",
+  "devDependencies": {}
 }
