@@ -1,34 +1,40 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const app = express();
-const PORT = process.env.PORT || 8080;
+// Otetaan express-moduuli käyttöön
+var express = require("express");
+var app = express();
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-
+// Tämä tarvitaan lomakedatan lukemista varten
+var bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
     res.render("pages/index.ejs");
   });
+// Luodaan reitit ja niiden toiminnallisuudet
 
-const mongoose = require("mongoose");
-//Lisätään tietokannan osoite muuttujaan.
-var uri = "mongodb+srv://kears:Password123@cluster0.39rm7.mongodb.net/WEBapplicationRESTAPI?retryWrites=true&w=majority"
+// Tulostetaan kaikki leffat
+app.get("/api/leffat", function (req, res) {
+    res.send("Tulostetaan kaikki leffat.");
+});
 
-//Yhdistetään ohjelma tietokantaan
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
-.then(() => {console.log("Connected to the database!")})
-.catch(err => {
-console.log("Failed to connect to the database.", err)
-    process.exit();
-})
+// Lisätään yksi leffa - huomaa POST-muuttujien lukeminen
+app.post("/api/lisaa", function (req, res) {
+    res.send("Lisätään leffa: " + req.body.title + " (" + req.body.year + ")");
 
-//Tuodaan reitit erillisestä tiedostosta
-require("./app/routes/routes")(app);
+});
 
-//Ohjelma kuuntelee ympäristön määrittämää porttia, tai porttia 8080
-app.listen(PORT, () => {
-    console.log("Server is running!")
-})
+// Muokataan leffan tietoja id-numeron perusteella. Huomaa ID-arvon lukeminen
+app.put("/api/muokkaa/:id", function (req, res) {
+    res.send("Muokataan leffaa id:llä: " + req.params.id);
+});
+
+// Poistetaan leffa id:n perusteella. Huomaa ID-arvon lukeminen 
+app.delete("/api/poista/:id", function (req, res) {
+    res.send("Poistetaan leffa id:llä: " + req.params.id);
+});
+
+// Web-palvelimen luonti Expressin avulla
+app.listen(8081, function () {
+    console.log("Kuunnellaan porttia 8081!");
+});
