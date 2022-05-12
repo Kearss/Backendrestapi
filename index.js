@@ -16,20 +16,14 @@ console.log("Failed to connect to the database.", err)
     process.exit();
 })
 
-const MusicSchema = mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    artist: String
-}, 
-{
-    timestamps: true
-});
+
 // Määritellään Schema, eli tietomalli.
 const Music = mongoose.model(
     "music",
-    MusicSchema,
+    {
+        title: String,
+        artist: String,
+      },
     "music"  // HUOM. Kohdistetaan skeeman operaatiot tähän kokoelmaan
 );
 
@@ -41,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /* Tulostetaan kaikki kappaleet */
 app.get("/api/musiikit", function (req, res) {
-    Music.find({}, null, { limit: 20 }, function (err, results) {
+    Music.find({}, function (err, results) {
         /*     Jos tietokantahaussa tapahtuu virhe, palautetaan virhekoodi myös selaimelle */
         if (err) {
             res.json("Järjestelmässä tapahtui virhe", 500);
@@ -56,58 +50,60 @@ app.get("/api/musiikit", function (req, res) {
 // Lisätään yksi kappale - huomaa POST-muuttujien lukeminen
 
 app.post("/api/lisaa", function (req, res) {
-    var title = req.body.title;
-    var artist = req.body.artist;
-
-    const music = new Music({
-        title: req.body.title,
-        artist: req.body.artist
+    const newMusic = new Music({
+        title: request.body.title,
+        artist: request.body.artist,
+      });
+    
+      newMusic.save((err, result) => {
+        if (err) {
+          response.json("System failure", 500);
+        }
+    
+        response.json(`Saved joke: ${result}`, 200);
+      });
     });
-    console.log(music);
-    music.save();
-
-    res.send("Lisätään kappale: " + req.body.title );
-});
 
 /* Muokataan kappale tietoja id-numeron perusteella. Huomaa ID-arvon lukeminen */
 app.put("/api/muokkaa/:id", function (req, res) {
 
-    var id = req.params.id;
+    const id = request.params.id;
 
-    Music.findByIdAndUpdate(id, { title: 'Tänne uusi nimi' }, function (err, results) {
-        /*     Jos tietokantahaussa tapahtuu virhe, palautetaan virhekoodi myös selaimelle */
-        if (err) {
-            res.json("Järjestelmässä tapahtui virhe", 500);
-        }
-        /*      Muuten lähetetään tietokannan tulokset selaimelle  */
-        else {
-            res.json("Muokattiin kappaleen id:llä: " + req.params.id + " nimeltään: " + results.title);
-        }
+    Music.findById(id, (err, results) => {
+      if (err) {
+        response.json("System failure", 500);
+      } else if (results === null) {
+        response.json("Nothing to update with given id", 200);
+      } else {
+        results.title = request.body.title;
+        results.category = request.body.category;
+        results.body = request.body.body;
+        results.save((err, result) => {
+          if (err) {
+            response.json("System failure", 500);
+          }
+        });
+        response.json(`Updated the Joke with id ${id}`);
+      }
     });
-});
+  });
 
 /* Poistetaan kappale id:n perusteella. Huomaa ID-arvon lukeminen  */
 
 app.delete("/api/poista/:id", function (req, res) {
     // Poimitaan id talteen ja välitetään se tietokannan poisto-operaatioon
-    var id = req.params.id;
+    const id = request.params.id;
 
-    Music.findByIdAndDelete(id, function (err, results) {
-        /*         Tietokantavirheen käsittely  */
-        if (err) {
-            console.log(err);
-            res.json("Tietokantajärjestelmävirhe. Yritä hetken kuluttua uudestaa...", 500);
-        }
-        /*       Tietokanta ok, mutta poistettavaa ei löydy. Onko kyseessä virhe vai ei on semantiikkaa */
-        else if (results == null) {
-            res.json("Poistetavaa dokumenttia ei löytynyt.", 200);
-        } // Viimeisenä tilanne jossa kaikki ok
-        else {
-            console.log(results);
-            res.json("Deleted " + id + " " + results.title, 200);
-        }
+    Music.findByIdAndDelete(id, (err, results) => {
+      if (err) {
+        response.json("System failure", 500);
+      } else if (results === null) {
+        response.json("Nothing to delete with given id", 200);
+      } else {
+        response.json(`Deleted the Joke with id ${id} and title ${results.title}`, 200);
+      }
     });
-});
+  });
 
 // Web-palvelimen luonti Expressin avulla
 app.listen(8081, function () {
