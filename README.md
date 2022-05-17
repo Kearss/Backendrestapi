@@ -1,4 +1,4 @@
-# WEBapplicationwithRESTAPI
+# Backendrestapi
 Projects idea is to test how rest api works and using mongobd to stora data. this allows me to understand how to connect a server with webapplication. 
 
 Project uses mongodb to store and modify json files. in this project we creating links that provide a method of creating, modifying, removing and searching for the data on json file with postman testing tool.
